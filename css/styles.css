@@ -1,4 +1,6 @@
-/* Styles personnalisés pour l'application Networking Event Planner */
+/* ============================================
+   STYLES GÉNÉRAUX
+   ============================================ */
 
 * {
     margin: 0;
@@ -7,18 +9,14 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-    min-height: 100vh;
-}
+/* ============================================
+   PERSONNALISATION SCROLLBAR
+   ============================================ */
 
-/* Personnalisation scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -38,44 +36,336 @@ body {
     background: #7c2a73;
 }
 
-/* Animations */
-@keyframes fadeIn {
+/* ============================================
+   BANNIÈRE DE NOTIFICATION
+   ============================================ */
+
+.notification-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 40px 60px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    z-index: 1000;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
     from {
+        transform: translate(-50%, -50%) scale(0.8);
         opacity: 0;
-        transform: translateY(10px);
     }
     to {
+        transform: translate(-50%, -50%) scale(1);
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
-.fade-in {
-    animation: fadeIn 0.3s ease-in-out;
+/* ============================================
+   ANIMATIONS POUR LE LOGO
+   ============================================ */
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 0.2; 
+        transform: scale(0.9);
+    }
+    50% { 
+        opacity: 0.5; 
+        transform: scale(1.1);
+    }
 }
 
-/* Responsive adjustments */
+@keyframes logoAppear {
+    0% { 
+        opacity: 0; 
+        transform: scale(0.5) rotate(-10deg);
+    }
+    100% { 
+        opacity: 1; 
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* ============================================
+   CONTAINER POUR LE LOGO
+   ============================================ */
+
+.logo-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.logo-image {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   STYLE POUR LE CHRONO ACTIF
+   ============================================ */
+
+.chrono-urgent {
+    position: relative;
+    box-shadow: 0 0 20px rgba(211, 40, 105, 0.4);
+}
+
+/* ============================================
+   LAYOUT FLEX POUR LA GESTION DES TOURS
+   Structure: 100vw x 100vh avec chronomètres en haut et tables en bas
+   ============================================ */
+
+.tour-management-container {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 20px;
+    gap: 20px;
+    background: linear-gradient(to bottom right, #fce7f3, #e9d5ff);
+    overflow: hidden;
+}
+
+/* Section des chronomètres (partie haute) - prend 50% de la hauteur */
+.chronos-section {
+    flex: 0 0 50vh;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+}
+
+/* Section des tables (partie basse) - prend les 50% restants */
+.tables-section {
+    flex: 0 0 50vh;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+}
+
+/* Grid des chronomètres */
+.chronos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+    gap: 12px;
+    width: 100%;
+    flex: 1;
+}
+
+/* Grid des tables */
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+    gap: 12px;
+    width: 100%;
+    flex: 1;
+}
+/* Titres dans les sections */
+.chronos-section h2,
+.chronos-section h3,
+.tables-section h3 {
+    margin: 0;
+    padding: 0;
+}
+
+/* Contrôles compacts */
+.chrono-controls,
+.tour-navigation {
+    flex-shrink: 0;
+}
+
+/* Carte de chronomètre individuel */
+.chrono-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    min-height: 140px;
+}
+
+/* Carte de table */
+.table-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid #d32869;
+    background-color: #f8f0f5;
+}
+
+/* Contrôles du chronomètre */
+.chrono-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+/* Navigation des tours */
+.tour-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* ============================================
+   RESPONSIVE - Ajustements pour petits écrans
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .tour-management-container {
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .chronos-section {
+        flex: 0 0 45vh;
+    }
+    
+    .tables-section {
+        flex: 0 0 45vh;
+    }
+    
+    .chronos-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+    }
+    
+    .tables-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+    }
+}
+
 @media (max-width: 768px) {
-    .grid-cols-3 {
-        grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    .tour-management-container {
+        padding: 10px;
+        gap: 10px;
     }
     
-    .grid-cols-4 {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    .chronos-section {
+        flex: 0 0 40vh;
     }
     
-    .text-7xl {
-        font-size: 3rem !important;
+    .tables-section {
+        flex: 0 0 50vh;
+    }
+    
+    .chronos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .tables-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .notification-banner {
+        font-size: 24px;
+        padding: 30px 40px;
+    }
+    
+    .chrono-card {
+        min-height: 100px;
+        padding: 12px;
     }
 }
 
-/* Print styles */
-@media print {
-    .no-print {
-        display: none !important;
+@media (max-width: 480px) {
+    .tour-management-container {
+        padding: 5px;
+        gap: 8px;
     }
     
-    body {
-        background: white !important;
+    .chronos-grid {
+        grid-template-columns: 1fr;
     }
+    
+    .chrono-controls {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .chrono-controls button {
+        width: 100%;
+    }
+    
+    .tour-navigation {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .tour-navigation button {
+        width: 100%;
+    }
+}
+/* ============================================
+   UTILITAIRES
+   ============================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Couleurs personnalisées */
+.bg-primary {
+    background-color: #d32869;
+}
+
+.bg-secondary {
+    background-color: #7c2a73;
+}
+
+.bg-success {
+    background-color: #90EE90;
+}
+
+.text-primary {
+    color: #d32869;
+}
+
+.text-secondary {
+    color: #7c2a73;
+}
+
+.border-primary {
+    border-color: #d32869;
+}
+
+.border-secondary {
+    border-color: #7c2a73;
 }
